@@ -12,9 +12,17 @@ struct Environment: Identifiable{
     var id: String = UUID().uuidString
     var imageName: String
     var title: String
+    var elements: [Element] = []
 }
+
+struct Element: Identifiable {
+    var id: String = UUID().uuidString
+    var imageName: String
+    var position: CGPoint
+}
+
 var environments: [Environment] = [
-    .init(imageName: "Image 1", title: "Hospital"),
-    .init(imageName: "Image 2", title: "LivingRoom"),
-    .init(imageName: "Image 3", title: "Kitchen"),
+    .init(imageName: "Hospital", title: "Hospital"),
+    .init(imageName: "LivingRoom", title: "Living Room"),
+    .init(imageName: "Kitchen", title: "Kitchen"),
 ]
