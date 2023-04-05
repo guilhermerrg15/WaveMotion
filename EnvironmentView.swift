@@ -63,7 +63,6 @@ struct EnvironmentView: View {
             .padding(.top, 120)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .offset(y:showWalkThroughScreens ? -geometry.size.height : 0)
-            .animation(.interactiveSpring(response: 0.9,dampingFraction: 0.8, blendDuration: 0.5), value: showWalkThroughScreens)
         }
         .ignoresSafeArea()
     }
@@ -132,9 +131,9 @@ struct EnvironmentView: View {
                             .font(.system(size: 40, weight: .bold))
                             .foregroundColor(Color("ColorText"))
                             .padding()
-//                            .onTapGesture {
-//                                currentIndex -= 1
-//                            }
+                            .onTapGesture {
+                                currentIndex -= 1
+                            }
                     }
                     Spacer()
                     if currentIndex < environments.count - 1 {
@@ -142,9 +141,9 @@ struct EnvironmentView: View {
                             .font(.system(size: 40, weight: .bold))
                             .foregroundColor(Color("ColorText"))
                             .padding()
-//                            .onTapGesture {
-//                                currentIndex += 1
-//                            }
+                            .onTapGesture {
+                                currentIndex += 1
+                            }
                     }
                 }
                 .padding(.horizontal)
