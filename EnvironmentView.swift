@@ -11,6 +11,7 @@ import SwiftUI
 struct EnvironmentView: View {
     @State var showWalkThroughScreens: Bool = false
     @State var currentIndex: Int = 0
+    @State private var currentPageIndex = 0
     
     let environmentsMini = [
         ("Hospital", "miniHospital"),
@@ -26,7 +27,7 @@ struct EnvironmentView: View {
             
             NavBar
             
-            walkThroughScreens()
+            WalkThroughScreens()
             
             
         }
@@ -73,14 +74,12 @@ struct EnvironmentView: View {
                 currentIndex = -1
                 showWalkThroughScreens.toggle()
             } label: {
-                Image(systemName: "chevron.left")
+                Image(systemName: "house.fill")
                     .font(.title3)
                     .fontWeight(.semibold)
                     .foregroundColor(Color("ColorText"))
             }
-
             Spacer()
-            
         }
         .padding(.horizontal,15)
         .padding(.top,10)
@@ -107,7 +106,7 @@ struct EnvironmentView: View {
                 .animation(.interactiveSpring(response: 0.9,dampingFraction: 0.8, blendDuration: 0.5).delay(0.1), value: currentIndex)
             
             Image(environment.imageName)
-                //.resizable()
+            //.resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(height: 250, alignment: .top)
                 .padding(.horizontal, 20)
@@ -115,48 +114,62 @@ struct EnvironmentView: View {
                 .animation(.interactiveSpring(response: 0.9,dampingFraction: 0.8, blendDuration: 0.5).delay(currentIndex == index ? 0 : 0.2), value: currentIndex)
             Spacer()
             
-            //            ForEach(environment.elements) {
-            //
-            //            }
         } .padding(.top, 80)
     }
     
+    
     @ViewBuilder
-    func walkThroughScreens()-> some View {
-        let isLast = currentIndex == environments.endIndex-1
-        GeometryReader {
-            let size = $0.size
-            
+    func WalkThroughScreens() -> some View {
+        GeometryReader { geometry in
+            let size = geometry.size
             ZStack {
-                ForEach(environments.indices,id: \.self){index in
+                ForEach(environments.indices, id: \.self) { index in
                     ScreenView(size: size, index: index)
                 }
+                HStack {
+                    if currentIndex > 0 {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 40, weight: .bold))
+                            .foregroundColor(Color("ColorText"))
+                            .padding()
+//                            .onTapGesture {
+//                                currentIndex -= 1
+//                            }
+                    }
+                    Spacer()
+                    if currentIndex < environments.count - 1 {
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 40, weight: .bold))
+                            .foregroundColor(Color("ColorText"))
+                            .padding()
+//                            .onTapGesture {
+//                                currentIndex += 1
+//                            }
+                    }
+                }
+                .padding(.horizontal)
+                .frame(maxWidth: .infinity, alignment: .bottom)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .overlay(alignment: .bottom) {
-                if currentIndex < environments.count - 1 {
-                    Image(systemName: "chevron.right")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .frame(width: 55, height: 55)
-                        .foregroundColor(.white)
-                        .background {
-                            RoundedRectangle(cornerRadius: 30, style: .circular)
-                                .fill(Color("ColorText"))
-                                .opacity(isLast ? 0 : 1)
-                                .animation(.easeInOut, value: isLast)
-                        }
-                        .onTapGesture {
+            .gesture(
+                DragGesture()
+                    .onEnded { value in
+                        if value.translation.width < 0, currentIndex < environments.count - 1 {
                             currentIndex += 1
+                        } else if value.translation.width > 0, currentIndex > 0 {
+                            currentIndex -= 1
                         }
-                        .offset(y: -90)
-                }
-            }
-            .offset(y:showWalkThroughScreens ? 0 : size.height)
+                    }
+            )
+            .offset(y: showWalkThroughScreens ? 0 : size.height)
+            .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5), value: showWalkThroughScreens)
+            .navigationBarHidden(true)
         }
     }
-    
+
 }
+
+
 
 
 @available(iOS 16.0, *)
