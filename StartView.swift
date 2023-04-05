@@ -23,7 +23,7 @@ struct StartView: View {
                             .font(.system(size: 100))
                             .foregroundColor(Color("ColorText"))
                         Group{
-                            NavigationLink(destination: WelcomeView()/*.navigationBarBackButtonHidden(true)*/) {
+                            NavigationLink(destination: WelcomeView().navigationBarBackButtonHidden(true)) {
                                 Text("Start")
                                     .font(.system(size: 70))
                                     .fontWeight(.semibold)
