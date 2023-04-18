@@ -11,6 +11,7 @@ import SwiftUI
 struct Environment: Identifiable{
     var id: String = UUID().uuidString
     var imageName: String
+
     var title: String
     var elements: [Element] = []
 }

@@ -6,6 +6,9 @@ import SwiftUI
 
 @available(iOS 16.0, *)
 struct StartView: View {
+    @State private var showWelcomeView = false
+    @State private var startViewOffset = CGSize.zero
+
     var body: some View {
         NavigationStack{
             ZStack{
@@ -22,20 +25,33 @@ struct StartView: View {
                         Text("WAVE MOTION")
                             .font(.system(size: 100))
                             .foregroundColor(Color("ColorText"))
-                        Group{
-                            NavigationLink(destination: WelcomeView().navigationBarBackButtonHidden(true)) {
-                                Text("Start")
-                                    .font(.system(size: 70))
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.white)
-                                    .frame(width: 220, height: 100)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 60)
-                                            .fill(Color("ColorText"))
-                                    )
-                                    .padding(.top, 60)
-                            }
+                        //NavigationLink(destination: WelcomeView().navigationBarBackButtonHidden(true)) {
+                        if showWelcomeView {
+                            WelcomeView()
+                                .transition(.move(edge: .trailing))
+                                .animation(.easeInOut)
+                        } else {
+                            Text("Start")
+                                .font(.system(size: 70))
+                                .fontWeight(.semibold)
+                                .foregroundColor(.white)
+                                .frame(width: 220, height: 100)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 60)
+                                        .fill(Color("ColorText"))
+                                )
+                                .gesture(
+                                    TapGesture()
+                                        .onEnded { _ in
+                                            withAnimation {
+                                                self.showWelcomeView = true
+                                            }
+                                        }
+                                )
+                            .padding(.top, 60)
+
                         }
+                        //}
                         //.padding(.top, 300)
                         Spacer()
                     }
@@ -43,15 +59,11 @@ struct StartView: View {
             }
         }
     }
-    
-    
-    
-    
-    
+
     struct ContentView_Previews: PreviewProvider {
         static var previews: some View {
             StartView()
         }
     }
-    
+
 }
