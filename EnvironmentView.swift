@@ -12,7 +12,7 @@ struct EnvironmentView: View {
     
     @State var showWalkThroughScreens: Bool = false
     @State var currentIndex: Int = 0
-    
+    @State private var isFinalViewActive = false
     let environmentsMini = [
         ("Hospital", "miniHospital"),
         ("Living Room", "miniLivingRoom"),
@@ -66,7 +66,7 @@ struct EnvironmentView: View {
                         .background(Color("ColorText"))
                 }
             }
-
+            
         }
         .padding(.top, 100)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -114,7 +114,7 @@ struct EnvironmentView: View {
                             currentIndex -= 1
                         }
                         .opacity(currentIndex == 0 ? 0 : 1)
-                   
+                    
                     Spacer()
                     if currentIndex < 2 {
                         Image(systemName: "chevron.right")
@@ -125,6 +125,26 @@ struct EnvironmentView: View {
                                 currentIndex += 1
                             }
                     }
+                    if currentIndex == 2{
+                        VStack{
+                            NavigationLink(
+                                destination: FinalView().navigationBarBackButtonHidden(true),
+                                isActive: $isFinalViewActive,
+                                label: {
+                                    Group{
+                                        Text("Continue")
+                                            .font(.system(size: 16, weight: .semibold))
+                                            .foregroundColor(.white)
+                                            .padding(.horizontal, 16)
+                                            .padding(.vertical, 8)
+                                            .background(Color("ColorText"))
+                                            .cornerRadius(8)
+                                    } .padding(.top, 30)
+                                        .padding(.trailing)
+                                })
+                            Spacer()
+                        }
+                    }
                 }
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .bottom)
@@ -133,7 +153,7 @@ struct EnvironmentView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
             .offset(y: showWalkThroughScreens ? 0 : size.height)
-
+            
             .navigationBarHidden(true)
         }
     }
