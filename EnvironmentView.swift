@@ -60,10 +60,13 @@ struct EnvironmentView: View {
                         }
                 }
                 .padding(.leading, 80)
-                Divider()
-                    .frame(width: UIScreen.main.bounds.width/1.1,height: 5)
-                    .background(Color("ColorText"))
+                if index != environmentsMini.indices.last {
+                    Divider()
+                        .frame(width: UIScreen.main.bounds.width/1.1, height: 5)
+                        .background(Color("ColorText"))
+                }
             }
+
         }
         .padding(.top, 100)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -91,64 +94,27 @@ struct EnvironmentView: View {
     }
     
     @ViewBuilder
-    func ScreenView(size: CGSize, index: Int)-> some View{
-        let environment = environments[index]
-        
-        VStack(spacing: 40) {
-            Text(environment.title)
-                .foregroundColor(Color("ColorText"))
-                .font(.system(size: 60))
-                .offset(x: -size.width * CGFloat(currentIndex - index))
-                .animation(.interactiveSpring(response: 0.9,dampingFraction: 0.8, blendDuration: 0.5).delay(currentIndex == index ? 0.2 : 0), value: currentIndex)
-            
-            Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ")
-                .foregroundColor(Color("ColorText"))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 50)
-                .offset(x: -size.width * CGFloat(currentIndex - index))
-                .animation(.interactiveSpring(response: 0.9,dampingFraction: 0.8, blendDuration: 0.5).delay(0.1), value: currentIndex)
-            
-            Image(environment.imageName)
-                .aspectRatio(contentMode: .fit)
-                .frame(height: 250, alignment: .top)
-                .padding(.horizontal, 20)
-                .offset(x: -size.width * CGFloat(currentIndex - index))
-                .animation(
-                    .interactiveSpring(
-                        response: 0.9,
-                        dampingFraction: 0.8,
-                        blendDuration: 0.5
-                    ).delay(currentIndex == index ? 0 : 0.2),
-                    value: currentIndex
-                )
-            
-            Spacer()
-            
-        } .padding(.top, 80)
-    }
-    
-    
-    @ViewBuilder
     func walkThroughScreens() -> some View {
         GeometryReader { geometry in
             let size = geometry.size
             ZStack {
                 ForEach(0..<3) { index in
-                    sceneSelector(size: size, index: currentIndex)
+                    sceneSelector(size: size, index: index)
                         .offset(x: -size.width * CGFloat(currentIndex - index))
                         .animation(.interactiveSpring(response: 0.9,dampingFraction: 0.8, blendDuration: 0.5).delay(currentIndex == index ? 0.2 : 0), value: currentIndex)
                 }
+                
                 navBar
                 HStack {
-                    if currentIndex > 0 {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 40, weight: .bold))
-                            .foregroundColor(Color("ColorText"))
-                            .padding()
-                            .onTapGesture {
-                                currentIndex -= 1
-                            }
-                    }
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 40, weight: .bold))
+                        .foregroundColor(Color("ColorText"))
+                        .padding()
+                        .onTapGesture {
+                            currentIndex -= 1
+                        }
+                        .opacity(currentIndex == 0 ? 0 : 1)
+                   
                     Spacer()
                     if currentIndex < 2 {
                         Image(systemName: "chevron.right")
@@ -158,33 +124,22 @@ struct EnvironmentView: View {
                             .onTapGesture {
                                 currentIndex += 1
                             }
-                        
                     }
                 }
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .bottom)
+                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5), value: showWalkThroughScreens)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            //            .gesture(
-            //                DragGesture()
-            //                    .onEnded { value in
-            //                        if value.translation.width < 0, currentIndex < environments.count - 1 {
-            //                            currentIndex += 1
-            //                        } else if value.translation.width > 0, currentIndex > 0 {
-            //                            currentIndex -= 1
-            //                        }
-            //                    }
-            //            )
+            
             .offset(y: showWalkThroughScreens ? 0 : size.height)
-            .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5), value: showWalkThroughScreens)
+
             .navigationBarHidden(true)
         }
     }
     
-    
     @ViewBuilder
     func sceneSelector(size: CGSize, index:Int)-> some View {
-        
         switch index {
         case 0:
             SceneImage(text: "      Find the element\n that produces frequency", backImage: "Hospital", elementImages: [("xray", CGPoint(x: -120, y: -80), 0)])
@@ -196,5 +151,5 @@ struct EnvironmentView: View {
             Text("Deu Ruim")
         }
     }
-    
 }
+

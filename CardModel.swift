@@ -16,9 +16,9 @@ struct CardModel {
 }
 
 var cardModels: [CardModel] = [
-    CardModel(waveName: "X-Ray Machine", waveImage: "waveXray", waveLength: "Length: 20", energyMeasure: "Energy:", energyImage: ["lightBulbOn", "lightBulbOn", "lightBulbOn"]),
-    CardModel(waveName: "Television", waveImage: "waveRadio", waveLength: "Length", energyMeasure: "Energy:", energyImage: ["lightBulbOn", "lightBulbOff", "lightBulbOff"]),
-    CardModel(waveName: "Microwave", waveImage: "waveMicrowave", waveLength: "Length", energyMeasure: "Energy:", energyImage: ["lightBulbOn", "lightBulbOn", "lightBulbOff"])
+    CardModel(waveName: "X-Ray Machine", waveImage: "waveXray", waveLength: "Length: 0.1 to 10nm", energyMeasure: "Energy:", energyImage: ["lightBulbOn", "lightBulbOn", "lightBulbOn"]),
+    CardModel(waveName: "Television", waveImage: "waveRadio", waveLength: " Length: 1cm to 10cm", energyMeasure: "Energy:", energyImage: ["lightBulbOn", "lightBulbOff", "lightBulbOff"]),
+    CardModel(waveName: "Microwave", waveImage: "waveMicrowave", waveLength: "Length: 1mm to 1cm", energyMeasure: "Energy:", energyImage: ["lightBulbOn", "lightBulbOn", "lightBulbOff"])
 ]
 
 

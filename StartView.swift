@@ -6,9 +6,9 @@ import SwiftUI
 
 @available(iOS 16.0, *)
 struct StartView: View {
+    
     @State private var showWelcomeView = false
-    @State private var startViewOffset = CGSize.zero
-
+    
     var body: some View {
         NavigationStack{
             ZStack{
@@ -25,12 +25,12 @@ struct StartView: View {
                         Text("WAVE MOTION")
                             .font(.system(size: 100))
                             .foregroundColor(Color("ColorText"))
-                        //NavigationLink(destination: WelcomeView().navigationBarBackButtonHidden(true)) {
-                        if showWelcomeView {
-                            WelcomeView()
-                                .transition(.move(edge: .trailing))
-                                .animation(.easeInOut)
-                        } else {
+                        
+                        Button(action: {
+                            withAnimation(Animation.interpolatingSpring(stiffness: 200, damping: 30).delay(0.2)) {
+                                showWelcomeView = true
+                            }
+                        }) {
                             Text("Start")
                                 .font(.system(size: 70))
                                 .fontWeight(.semibold)
@@ -40,30 +40,23 @@ struct StartView: View {
                                     RoundedRectangle(cornerRadius: 60)
                                         .fill(Color("ColorText"))
                                 )
-                                .gesture(
-                                    TapGesture()
-                                        .onEnded { _ in
-                                            withAnimation {
-                                                self.showWelcomeView = true
-                                            }
-                                        }
-                                )
-                            .padding(.top, 60)
-
+                                .padding(.top, 60)
                         }
-                        //}
-                        //.padding(.top, 300)
+                        .fullScreenCover(isPresented: $showWelcomeView) {
+                            WelcomeView()
+                                
+                        }                                                
                         Spacer()
                     }
                 }
             }
         }
+        
     }
-
-    struct ContentView_Previews: PreviewProvider {
-        static var previews: some View {
-            StartView()
-        }
-    }
-
 }
+
+
+
+
+
+
